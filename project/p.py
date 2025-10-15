@@ -1,135 +1,110 @@
+
 import random
 import heapq
-from collections import deque
-from dataclasses import dataclass
-from typing import List, Dict
 
 
-class constraint:
-    max_ammo = 30
-    max_health = 100
-    revive_threshold = 20
-    map_size = (20,12)
 
 
-class requirements:
-    objective : list[str]
-    roles: dict[str,str]
-    functional_requirement: list[str]
-    constraint: constraint
 
+# -----------------------
+# Constants / Tile types
+# -----------------------
+ROCK = '#'
+TREE = 'T'
+WATER = '~'
+EMPTY = '.'
+MED_DEPOT = 'M'
+AMMO_DEPOT = 'A'
 
-class gridmap:
-    def __init__(self,width,height,obstacle_prob=0.15):
-        self.width = width
-        self.height = height
-        self.grid = [[0 for _ in range(width)] for _ in range(height)]
+TILE_PASSABLE = {
+    ROCK: False,
+    WATER: False,
+    TREE: True,
+    EMPTY: True,
+    MED_DEPOT: True,
+    AMMO_DEPOT: True,
+}
 
-        for y in range(height): 
-            for x in range(width):
-                if random.random()< obstacle_prob:
-                    self.grid[y][x] = 1
-    
-    def display(self):
-        for row in self.grid:
-            print("".join("#"if cell else "." for cell in row))
+TILE_BLOCKS_VISION = {
+    ROCK: True,
+    TREE: True,
+    WATER: False,
+    EMPTY: False,
+    MED_DEPOT: False,
+    AMMO_DEPOT: False,
+}
 
+# -----------------------
+# Utility functions
+# -----------------------
+
+def neighbors(pos, w, h):
+    x, y = pos
+    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nx, ny = x + dx, y + dy
+        if 0 <= nx < w and 0 <= ny < h:
+            yield (nx, ny)
 
 
 def manhattan(a, b):
-    return abs(a[0]-b[0]) + abs(a[1]-b[1])
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-def a_star_search(grid, start, goal):
-    frontier = []
-    heapq.heappush(frontier, (0, start))
-    came_from = {start: None}
-    cost_so_far = {start: 0}
 
-    while frontier:
-        _, current = heapq.heappop(frontier)
-        if current == goal:
+def bresenham_line(a, b):
+    # returns list of integer points between a (inclusive) and b (inclusive)
+    x0, y0 = a
+    x1, y1 = b
+    points = []
+    dx = abs(x1 - x0)
+    dy = -abs(y1 - y0)
+    sx = 1 if x0 < x1 else -1
+    sy = 1 if y0 < y1 else -1
+    err = dx + dy
+    while True:
+        points.append((x0, y0))
+        if x0 == x1 and y0 == y1:
             break
-        neighbors = [(current[0]+dx, current[1]+dy) for dx,dy in [(1,0),(-1,0),(0,1),(0,-1)]]
-        for nxt in neighbors:
-            x,y = nxt
-            if 0 <= x < grid.width and 0 <= y < grid.height and grid.grid[y][x] == 0:
-                new_cost = cost_so_far[current]+1
-                if nxt not in cost_so_far or new_cost < cost_so_far[nxt]:
-                    cost_so_far[nxt] = new_cost
-                    priority = new_cost + manhattan(nxt, goal)
-                    heapq.heappush(frontier, (priority, nxt))
-                    came_from[nxt] = current
-    if goal not in came_from:
-        return None
-    # Reconstruct path
-    path=[]
-    cur=goal
-    while cur:
-        path.append(cur)
-        cur=came_from[cur]
-    return path[::-1]
+        e2 = 2 * err
+        if e2 >= dy:
+            err += dy
+            x0 += sx
+        if e2 <= dx:
+            err += dx
+            y0 += sy
+    return points
 
-def bfs(grid, start, goal):
-    q = deque([start])
-    came_from = {start: None}
-    while q:
-        cur = q.popleft()
-        if cur == goal: break
-        neighbors = [(cur[0]+dx, cur[1]+dy) for dx,dy in [(1,0),(-1,0),(0,1),(0,-1)]]
-        for nxt in neighbors:
-            x,y = nxt
-            if 0 <= x < grid.width and 0 <= y < grid.height and grid.grid[y][x]==0:
-                if nxt not in came_from:
-                    came_from[nxt] = cur
-                    q.append(nxt)
-    if goal not in came_from: return None
-    path=[]
-    cur=goal
-    while cur:
-        path.append(cur)
-        cur=came_from[cur]
-    return path[::-1]
+# -----------------------
+# MapGrid
+# -----------------------
+class MapGrid:
+    def __init__(self, width: int, height: int):
+        self.w = width
+        self.h = height
+        # grid[x][y] layout (width-major) — this is consistent across code
+        self.grid = [[EMPTY for _ in range(height)] for _ in range(width)]
+        self._place_random_obstacles()
 
+    def _place_random_obstacles(self):
+        # For demo: scatter some rocks, trees, water, and depots
+        for x in range(self.w):
+            for y in range(self.h):
+                r = random.random()
+                if r < 0.06:
+                    self.grid[x][y] = ROCK
+                elif r < 0.14:
+                    self.grid[x][y] = TREE
+                elif r < 0.18:
+                    self.grid[x][y] = WATER
+                # else empty
+        # place depots
+        for _ in range(2):
+            self._place_tile_random(MED_DEPOT)
+            self._place_tile_random(AMMO_DEPOT)
 
-class agent:
-    def __init__(self,name,pos,health=100,ammo=10):
-        self.name= name
-        self.pos = pos
-        self.health = health
-        self.ammo = ammo
-
-
-class warrior(agent):
-    def attack(self,target_pos):
-        if   self.ammo > 0:
-            print(f"{self.ammo}attack at{target_pos}")
-            self.ammo -= 1
-
-
-class medic(agent):
-    def heal(self,ally):
-        if ally.health < 100:
-            print(f"{self.name} heals {ally.name}")
-            self.ally +=20
-
-
-
-def compute_visibility(grid, source, radius=6):
-    visible = set()
-    sx,sy = source
-    for y in range(max(0,sy-radius), min(grid.height, sy+radius+1)):
-        for x in range(max(0,sx-radius), min(grid.width, sx+radius+1)):
-            if grid.grid[y][x]==0:
-                visible.add((x,y))
-    return visible
-
-def compute_safety(grid, enemy_positions, radius=4):
-    danger=[[0]*grid.width for _ in range(grid.height)]
-    for y in range(grid.height):
-        for x in range(grid.width):
-            for ex,ey in enemy_positions:
-                d = ((x-ex)**2 + (y-ey)**2)**0.5
-                if d<=radius:
-                    danger[y][x]+=int((radius-d)*10)
-    return danger
-
+    def _place_tile_random(self, tile):
+        for _ in range(200):
+            x = random.randrange(self.w)
+            y = random.randrange(self.h)
+            if self.grid[x][y] == EMPTY:
+                self.grid[x][y] = tile
+                return
