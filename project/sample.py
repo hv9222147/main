@@ -107,7 +107,7 @@ WATER = '~'
 EMPTY = '.'
 MED_DEPOT = 'M'
 AMMO_DEPOT = 'A'
-
+    
 TILE_PASSABLE = {
     ROCK: False,
     WATER: False,
@@ -709,3 +709,4 @@ def run_demo(seed=1, max_turns=200):
 
 if __name__ == '__main__':
     run_demo(seed=42, max_turns=200)
+                                                                                                                                                                    
