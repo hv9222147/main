@@ -1,146 +1,157 @@
-# # import random
+import tkinter as tk
+from tkinter import messagebox
 
-# # empty = '~'
-# # water = 'W'
-# # rock = 'R'
-# # tree = 'T'
-# # depot = 'D'
+# Main Window
+root = tk.Tk()
+root.title("Interactive Learning Site for Kids")
+root.geometry("800x600")
+root.config(bg="#E3F2FD")
 
-# # def generate_project_map(width, height, rock_prob=0.1, tree_prob=0.2, water_prob=0.1):
+# Title
+title = tk.Label(
+    root,
+    text="🎉 Interactive Learning Site for Kids 🎉",
+    font=("Arial", 18, "bold"),
+    bg="#E3F2FD",
+    fg="#E91E63"
+)
+title.pack(pady=10)
 
-# #     project_map = []
-# #     for y in range(height):
-# #         row = []
-# #         for x in range(weight):
-# #             rand_val = random.random()
-# #             if rand_val < rock_prob:
-# #                 row.append(rock)
-# #             elif rand_val < rock_prob + tree_prob:
-# #                 row.append(tree)
-# #             elif rand_val < rock_prob + tree_prob + water_prob:
-# #                  row.append(water)
-# #             else:
-# #                 row.append(empty)
-# #         project_map.append(row)
-# #     return project_mapht:
+# Clear Screen Function
+def clear_screen():
+    for widget in root.winfo_children():
+        if widget != title:
+            widget.destroy()
 
+# ---------------- QUIZ DATA ----------------
+questions = [
+    {
+        "question": "What comes after A?",
+        "options": ["B", "C", "D"],
+        "answer": "B"
+    },
+    {
+        "question": "Which number comes after 2?",
+        "options": ["1", "3", "4"],
+        "answer": "3"
+    },
+    {
+        "question": "A for?",
+        "options": ["Ball", "Apple", "Cat"],
+        "answer": "Apple"
+    }
+]
 
+current_q = 0
+score = 0
 
-# import random
+# ---------------- QUIZ FUNCTION ----------------
+def quiz():
+    clear_screen()
+    show_question()
 
-# # ---------- Terrain Types ----------
-# EMPTY = '.'
-# ROCK = 'R'
-# TREE = 'T'
-# WATER = 'W'
-# DEPOT = 'D'
+def show_question():
+    clear_screen()
+    global current_q
 
-# # ---------- Cell Class ----------
-# class Cell:
-#     def __init__(self, terrain=EMPTY, occupant=None):
-#         self.terrain = terrain     # What kind of ground (Rock, Tree, etc.)
-#         self.occupant = occupant   # Which unit is standing here (C, W, M, etc.)
+    if current_q >= len(questions):
+        messagebox.showinfo(
+            "Quiz Finished",
+            f"🎉 Quiz Over!\nYour Score: {score}/{len(questions)}"
+        )
+        main_menu()
+        return
 
-#     def __str__(self):
-#         # If someone is on this cell, show their letter; otherwise show terrain
-#         return self.occupant if self.occupant else self.terrain
+    q = questions[current_q]
 
+    tk.Label(
+        root,
+        text=f"Q{current_q + 1}. {q['question']}",
+        font=("Arial", 16, "bold"),
+        bg="#E3F2FD"
+    ).pack(pady=20)
 
-# # ---------- Map Class ----------
-# class Battlefield:
-#     def __init__(self, width, height):
-#         self.width = width
-#         self.height = height
-#         # Create a 2D list (matrix) of Cell objects
-#         self.grid = [[Cell() for _ in range(width)] for _ in range(height)]
+    for opt in q["options"]:
+        tk.Button(
+            root,
+            text=opt,
+            width=20,
+            font=("Arial", 12),
+            bg="#2196F3",
+            fg="white",
+            command=lambda o=opt: check_answer(o)
+        ).pack(pady=5)
 
-#     def generate(self):
-#         """Fill the map with random terrain."""
-#         for y in range(self.height):
-#             for x in range(self.width):
-#                 r = random.random()
-#                 if r < 0.1:            # 10% chance → Rock
-#                     self.grid[y][x].terrain = ROCK
-#                 elif r < 0.3:          # Next 20% → Tree
-#                     self.grid[y][x].terrain = TREE
-#                 elif r < 0.4:          # Next 10% → Water
-#                     self.grid[y][x].terrain = WATER
-#                 else:
-#                     self.grid[y][x].terrain = EMPTY  # Remaining 60%
+def check_answer(selected):
+    global current_q, score
+    correct = questions[current_q]["answer"]
 
-#         # Place 2 depots (for demo)
-#         self.grid[1][1].terrain = DEPOT
-#         self.grid[self.height - 2][self.width - 2].terrain = DEPOT
+    if selected == correct:
+        score += 1
+        messagebox.showinfo("Result", "✅ Correct Answer!")
+    else:
+        messagebox.showerror(
+            "Result",
+            f"❌ Wrong Answer!\nCorrect Answer is: {correct}"
+        )
 
-#     def place_unit(self, x, y, symbol):
-#         """Place a soldier/commander/medic on the map."""
-#         if 0 <= x < self.width and 0 <= y < self.height:
-#             self.grid[y][x].occupant = symbol
+    current_q += 1
+    show_question()
 
-#     def display(self):
-#         """Show the battlefield."""
-#         print("\nBattlefield Map:\n")
-#         for row in self.grid:
-#             print(" ".join(str(cell) for cell in row))
-#         print()
+# ---------------- LEARNING SECTIONS ----------------
+def learn_alphabets():
+    clear_screen()
+    tk.Label(root, text="🔤 Learn Alphabets",
+             font=("Arial", 16, "bold"),
+             bg="#E3F2FD").pack(pady=10)
 
+    alphabets = ["A - Apple 🍎", "B - Ball ⚽", "C - Cat 🐱", "D - Dog 🐶"]
+    for a in alphabets:
+        tk.Label(root, text=a, font=("Arial", 14),
+                 bg="#E3F2FD").pack()
 
-# # ---------- Example Use ----------
-# if __name__ == "__main__":
-#     bf = Battlefield(12, 8)
-#     bf.generate()
+    tk.Button(root, text="⬅ Back",
+              command=main_menu,
+              bg="#4CAF50", fg="white").pack(pady=20)
 
-#     # Place some units
-#     bf.place_unit(0, 0, 'C')  # Commander
-#     bf.place_unit(2, 0, 'W')  # Warrior
-#     bf.place_unit(3, 0, 'M')  # Medic
-#     bf.place_unit(4, 0, 'P')  # Supply soldier
+def learn_numbers():
+    clear_screen()
+    tk.Label(root, text="🔢 Learn Numbers",
+             font=("Arial", 16, "bold"),
+             bg="#E3F2FD").pack(pady=10)
 
-#     bf.display()
+    numbers = ["1 - One", "2 - Two", "3 - Three", "4 - Four"]
+    for n in numbers:
+        tk.Label(root, text=n, font=("Arial", 14),
+                 bg="#E3F2FD").pack()
 
+    tk.Button(root, text="⬅ Back",
+              command=main_menu,
+              bg="#4CAF50", fg="white").pack(pady=20)
 
+# ---------------- MAIN MENU ----------------
+def main_menu():
+    global current_q, score
+    current_q = 0
+    score = 0
 
-# Define terrain types
-class Terrain:
-    ROCK = "R"
-    TREE = "T"
-    WATER = "W"
-    EMPTY = "."
-    DEPOT = "D"
+    clear_screen()
 
-# Define a cell on the battlefield
-class Cell:
-    def __init__(self, terrain, occupant=None):
-        self.terrain = terrain
-        self.occupant = occupant  # could be 'soldier', 'tank', etc.
+    tk.Button(root, text="🔤 Learn Alphabets", width=25,
+              command=learn_alphabets,
+              bg="#FF9800", fg="white",
+              font=("Arial", 12)).pack(pady=10)
 
-    def __repr__(self):
-        """This helps print the cell in a readable way."""
-        return f"{self.terrain[:2]}"  # show first two letters (e.g., 'Ro' for Rock)
+    tk.Button(root, text="🔢 Learn Numbers", width=25,
+              command=learn_numbers,
+              bg="#03A9F4", fg="white",
+              font=("Arial", 12)).pack(pady=10)
 
-# Define the battlefield map (2D matrix)
-class Battlefield:
-    def __init__(self, width, height):
-        # create an empty map filled with 'Empty' terrain
-        self.map = [[Cell(Terrain.EMPTY) for _ in range(width)] for _ in range(height)]
+    tk.Button(root, text="❓ Fun Quiz", width=25,
+              command=quiz,
+              bg="#9C27B0", fg="white",
+              font=("Arial", 12)).pack(pady=10)
 
-    def set_terrain(self, x, y, terrain):
-        """Set the terrain type at a specific coordinate."""
-        self.map[y][x].terrain = terrain
-
-    def display(self):
-        """Print the battlefield in a grid format."""
-        for row in self.map:
-            print(" ".join(str(cell) for cell in row))
-
-# Create a 5x5 battlefield
-battlefield = Battlefield(5, 5)
-
-# Set some terrain types
-battlefield.set_terrain(1, 1, Terrain.ROCK)
-battlefield.set_terrain(2, 3, Terrain.TREE)
-battlefield.set_terrain(0, 4, Terrain.WATER)
-battlefield.set_terrain(3, 0, Terrain.DEPOT)
-
-# Display the battlefield
-battlefield.display()
+# Start App
+main_menu()
+root.mainloop()
