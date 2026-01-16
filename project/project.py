@@ -4,7 +4,7 @@ from tkinter import messagebox
 # Main Window
 root = tk.Tk()
 root.title("Interactive Learning Site for Kids")
-root.geometry("800x600")
+root.geometry("1500x1000")
 root.config(bg="#E3F2FD")
 
 # Title
@@ -17,13 +17,12 @@ title = tk.Label(
 )
 title.pack(pady=10)
 
-# Clear Screen Function
 def clear_screen():
     for widget in root.winfo_children():
         if widget != title:
             widget.destroy()
 
-# ---------------- QUIZ DATA ----------------
+
 questions = [
     {
         "question": "What comes after A?",
@@ -45,7 +44,6 @@ questions = [
 current_q = 0
 score = 0
 
-# ---------------- QUIZ FUNCTION ----------------
 def quiz():
     clear_screen()
     show_question()
@@ -98,7 +96,7 @@ def check_answer(selected):
     current_q += 1
     show_question()
 
-# ---------------- LEARNING SECTIONS ----------------
+
 def learn_alphabets():
     clear_screen()
     tk.Label(root, text="🔤 Learn Alphabets",
@@ -129,7 +127,7 @@ def learn_numbers():
               command=main_menu,
               bg="#4CAF50", fg="white").pack(pady=20)
 
-# ---------------- MAIN MENU ----------------
+
 def main_menu():
     global current_q, score
     current_q = 0
