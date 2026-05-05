@@ -1,0 +1,97 @@
+body {
+  body {
+  font-family: Arial;
+  text-align: center;
+
+  background: url("bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+}
+
+
+button {
+  padding: 10px;
+  margin: 5px;
+}
+
+.area {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+
+#apple {
+  font-size: 40px;
+}
+
+#basket {
+  font-size: 60px;
+  border: 2px dashed black;
+  padding: 20px;
+}
+
+.bar {
+  width: 80%;
+  height: 20px;
+  background: #ddd;
+  margin: auto;
+}
+
+#progress {
+  height: 100%;
+  width: 0%;
+  background: green;
+}
+
+.dark {
+  background: black;
+  color: white;
+}
+
+hr {
+  display: none;
+}
+/* 
+.cloud {
+  position: absolute;
+  top: 50px;
+  width: 1000px;
+  opacity: 0.8;
+  animation: moveClouds 30s linear infinite;
+}
+
+.cloud2 {
+  top: 120px;
+  width: 120px;
+  animation-duration: 40s;
+}
+
+@keyframes moveClouds {
+  from { left: -150px; }
+  to { left: 100%; }
+} */
+
+
+
+.cloud {
+  position: fixed;   /* screen pe fix rahega */
+  top: 50px;
+  left: -200px;      /* left se start */
+  width: 700px;      /* size bada */
+  opacity: 0.8;
+  animation: moveClouds 25s linear infinite;
+  z-index: -1;       /* background me rahe */
+}
+
+.cloud2 {
+  top: 120px;
+  width: 700px;
+  animation-duration: 35s;
+}
+
+@keyframes moveClouds {
+  0% { left: -200px; }
+  100% { left: 100%; }
+}

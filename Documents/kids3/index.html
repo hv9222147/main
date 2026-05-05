@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FunLearn Kids</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ☁️ Clouds -->
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud">
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud cloud2">
+
+<h1>🎨 FunLearn Kids</h1>
+<p>Learn while you play!</p>
+
+<button onclick="toggleDark()">🌙 Dark Mode</button>
+
+<hr>
+
+<!-- SUBJECTS -->
+<h2>Subjects</h2>
+
+<div class="subjects">
+  <button class="card" onclick="show('math')">➕ Math</button>
+  <button class="card" onclick="show('english')">🔤 English</button>
+  <button class="card" onclick="show('science')">🔬 Science</button>
+  <button class="card" onclick="show('gk')">🌍 GK</button>
+  <button class="card" onclick="show('drawing')">🎨 Drawing</button>
+</div>
+
+<div id="content"></div>
+
+<hr>
+
+<!-- PROGRESS -->
+<h2>📊 Progress</h2>
+<div class="bar">
+  <div id="progress"></div>
+</div>
+
+<h3>⭐ Points: <span id="points">0</span></h3>
+
+<hr>
+
+<!-- DRAG & DROP -->
+<h2>🧩 Drag the Apple to Basket</h2>
+
+<div class="area">
+  <div id="apple" draggable="true">🍎</div>
+  <div id="basket">🧺</div>
+</div>
+
+<hr>
+
+<!-- CHATBOT -->
+<h2>🤖 Chatbot</h2>
+<input id="input" placeholder="Ask something">
+<button onclick="chat()">Send</button>
+<p id="output"></p>
+
+<script src="script.js"></script>
+</body>
+</html>
