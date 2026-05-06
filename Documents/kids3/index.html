@@ -1,63 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>FunLearn Kids</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FunLearn Kids - Interactive Learning Site</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <!-- ☁️ Clouds -->
-<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud">
-<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" class="cloud cloud2">
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" alt="Cloud" class="cloud">
+<img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" alt="Cloud" class="cloud cloud2">
 
-<h1>🎨 FunLearn Kids</h1>
-<p>Learn while you play!</p>
-
-<button onclick="toggleDark()">🌙 Dark Mode</button>
+<header>
+  <p>Learn while you play! Discover new things in a fun way.</p>
+  <button onclick="toggleDark()" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
+</header>
 
 <hr>
 
 <!-- SUBJECTS -->
-<h2>Subjects</h2>
+<section>
+  <h2>Choose a Subject</h2>
+  <div class="subjects">
+    <button class="card" onclick="show('math')" aria-label="Math Subject">➕ Math</button>
+    <button class="card" onclick="show('english')" aria-label="English Subject">🔤 English</button>
+    <button class="card" onclick="show('science')" aria-label="Science Subject">🔬 Science</button>
+    <button class="card" onclick="show('gk')" aria-label="General Knowledge Subject">🌍 GK</button>
+    <button class="card" onclick="show('drawing')" aria-label="Drawing Subject">🎨 Drawing</button>
+  </div>
+</section>
 
-<div class="subjects">
-  <button class="card" onclick="show('math')">➕ Math</button>
-  <button class="card" onclick="show('english')">🔤 English</button>
-  <button class="card" onclick="show('science')">🔬 Science</button>
-  <button class="card" onclick="show('gk')">🌍 GK</button>
-  <button class="card" onclick="show('drawing')">🎨 Drawing</button>
-</div>
-
-<div id="content"></div>
+<section id="content">
+  <!-- Questions will load here -->
+</section>
 
 <hr>
 
 <!-- PROGRESS -->
-<h2>📊 Progress</h2>
-<div class="bar">
-  <div id="progress"></div>
-</div>
-
-<h3>⭐ Points: <span id="points">0</span></h3>
+<section>
+  <h2>📊 Your Progress</h2>
+  <div class="bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+    <div id="progress"></div>
+  </div>
+  <h3>⭐ Points: <span id="points">0</span></h3>
+  <button onclick="resetProgress()" style="background-color: #95A5A6;">🔄 Reset Progress</button>
+</section>
 
 <hr>
 
 <!-- DRAG & DROP -->
-<h2>🧩 Drag the Apple to Basket</h2>
-
-<div class="area">
-  <div id="apple" draggable="true">🍎</div>
-  <div id="basket">🧺</div>
-</div>
+<section>
+  <h2>🧩 Drag the Apple to the Basket</h2>
+  <p>Practice your mouse skills!</p>
+  <div class="area">
+    <div id="apple" draggable="true" aria-label="Draggable Apple">🍎</div>
+    <div id="basket" aria-label="Basket Drop Zone">🧺</div>
+  </div>
+</section>
 
 <hr>
 
 <!-- CHATBOT -->
-<h2>🤖 Chatbot</h2>
-<input id="input" placeholder="Ask something">
-<button onclick="chat()">Send</button>
-<p id="output"></p>
+<section>
+  <h2>🤖 Learning Buddy Chatbot</h2>
+  <p>Ask me anything about learning!</p>
+  <input id="input" placeholder="Type your question here" aria-label="Chatbot Input">
+  <button onclick="chat()" aria-label="Send Message">Send</button>
+  <p id="output" aria-live="polite"></p>
+</section>
 
 <script src="script.js"></script>
 </body>

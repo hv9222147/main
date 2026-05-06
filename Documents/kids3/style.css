@@ -1,88 +1,118 @@
 body {
-  body {
-  font-family: Arial;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
   text-align: center;
-
-  background: url("bg.jpg");
+  background: linear-gradient(to bottom, #87CEEB, #98FB98);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  color: #333;
+  margin: 0;
+  padding: 20px;
 }
-}
-
 
 button {
-  padding: 10px;
-  margin: 5px;
+  padding: 12px 20px;
+  margin: 8px;
+  border: none;
+  border-radius: 10px;
+  background-color: #FF6B6B;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #FF5252;
+}
+
+.card {
+  background-color: #4ECDC4;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+  background-color: #45B7AA;
 }
 
 .area {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 50px;
+  margin: 20px 0;
 }
 
 #apple {
-  font-size: 40px;
+  font-size: 50px;
+  cursor: grab;
 }
 
 #basket {
-  font-size: 60px;
-  border: 2px dashed black;
+  font-size: 70px;
+  border: none;
   padding: 20px;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.5);
 }
 
 .bar {
   width: 80%;
-  height: 20px;
+  height: 25px;
   background: #ddd;
-  margin: auto;
+  margin: 20px auto;
+  border-radius: 15px;
+  overflow: hidden;
 }
 
 #progress {
   height: 100%;
   width: 0%;
-  background: green;
+  background: linear-gradient(to right, #FFD93D, #FF6B6B);
+  transition: width 0.5s;
 }
 
 .dark {
-  background: black;
+  background: linear-gradient(to bottom, #2C3E50, #34495E);
   color: white;
 }
 
+.dark .card {
+  background-color: #3498DB;
+}
+
+.dark .card:hover {
+  background-color: #2980B9;
+}
+
 hr {
-  display: none;
-}
-/* 
-.cloud {
-  position: absolute;
-  top: 50px;
-  width: 1000px;
-  opacity: 0.8;
-  animation: moveClouds 30s linear infinite;
+  border: none;
+  height: 2px;
+  background: #FF6B6B;
+  margin: 20px 0;
 }
 
-.cloud2 {
-  top: 120px;
-  width: 120px;
-  animation-duration: 40s;
+input {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: rgba(255,255,255,0.8);
 }
 
-@keyframes moveClouds {
-  from { left: -150px; }
-  to { left: 100%; }
-} */
-
-
+#result {
+  font-size: 18px;
+  font-weight: bold;
+}
 
 .cloud {
-  position: fixed;   /* screen pe fix rahega */
+  position: fixed;
   top: 50px;
-  left: -200px;      /* left se start */
-  width: 700px;      /* size bada */
+  left: -200px;
+  width: 700px;
   opacity: 0.8;
   animation: moveClouds 25s linear infinite;
-  z-index: -1;       /* background me rahe */
+  z-index: -1;
 }
 
 .cloud2 {
@@ -93,5 +123,42 @@ hr {
 
 @keyframes moveClouds {
   0% { left: -200px; }
-  100% { left: 100%; }
+  100% { left: 100vw; }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .area {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .subjects {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+
+
+/* Remove unwanted borders and lines */
+
+hr {
+  display: none;
+}
+
+section,
+div,
+.card,
+.area,
+.subjects {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none;
 }
